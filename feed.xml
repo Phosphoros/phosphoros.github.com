@@ -7,7 +7,7 @@
     <atom:link href="http://sclausen.github.io/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
-        <title>Reduce Message Payload in an IoT setup</title>
+        <title>Reduce Message Payload in an IoT Setup</title>
         <description>
           
           Using Protobuf with Angular2 and MQTT In this article I’m writing about the usage of protobuf with typescript in Angular 2 via MQTT. The repository for this example is here Protobuf Protobuf a short for Protocol Buffers are […] Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data – think...
