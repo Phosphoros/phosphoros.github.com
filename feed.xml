@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Sebastian Clausen's Blog</title>
+    <description>A blog for Softwaredevelopment, -architecture and more</description>
+    <link>http://sclausen.github.io</link>
+    <atom:link href="http://sclausen.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    
+      <item>
+        <title>Reduce Payload in an IoT setup.</title>
+        <description>
+          
+          Using Protobuf with Angular2 and MQTT In this article I’m writing about the usage of protobuf with typescript in Angular 2 via MQTT. The repository for this example is here Protobuf Protobuf a short for Protocol Buffers are […] Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data – think...
+        </description>
+        <pubDate>Mon, 20 Feb 2017 09:30:00 +0100</pubDate>
+        <link>http://sclausen.github.io/2017-02-20-reduce-payload-in-an-iot-setup/</link>
+        <guid isPermaLink="true">http://sclausen.github.io/2017-02-20-reduce-payload-in-an-iot-setup/</guid>
+      </item>
+    
+  </channel>
+</rss>

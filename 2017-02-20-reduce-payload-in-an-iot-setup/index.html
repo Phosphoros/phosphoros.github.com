@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Beautiful Jekyll | MIT license | Copyright Dean Attali 2016 -->
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>Reduce Payload in an IoT setup.</title>
+
+  <meta name="author" content="Sebastian Clausen" />
+
+  
+
+  <link rel="alternate" type="application/rss+xml" title="Sebastian Clausen's Blog - A blog for Softwaredevelopment, -architecture and more" href="/feed.xml" />
+
+  
+
+  
+    
+      
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css" />
+
+    
+  
+
+  
+    
+      <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    
+      <link rel="stylesheet" href="/css/bootstrap-social.css" />
+    
+      <link rel="stylesheet" href="/css/main.css" />
+    
+  
+
+  
+    
+      <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+    
+      <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+    
+  
+
+  
+
+  
+
+  
+
+    <!-- Facebook OpenGraph tags -->
+  
+
+  
+  <meta property="og:title" content="Reduce Payload in an IoT setup." />
+  
+
+   
+  <meta property="og:description" content="Using Protobuf with Angular2 and MQTT In this article I’m writing about the usage of protobuf with typescript in Angular 2 via MQTT. The repository for this example is here Protobuf Protobuf a short for Protocol Buffers are […] Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data – think...">
+  
+
+
+  <meta property="og:type" content="website" />
+
+  
+  <meta property="og:url" content="http://sclausen.github.io/2017-02-20-reduce-payload-in-an-iot-setup/" />
+  <link rel="canonical" href="http://sclausen.github.io/2017-02-20-reduce-payload-in-an-iot-setup/" />
+  
+
+  
+  <meta property="og:image" content="http://sclausen.github.io/img/avatar-icon.png" />
+  
+  
+
+  <!-- Twitter summary cards -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@" />
+  <meta name="twitter:creator" content="@" />
+
+  
+  <meta name="twitter:title" content="Reduce Payload in an IoT setup." />
+  
+
+  
+  <meta name="twitter:description" content="Using Protobuf with Angular2 and MQTT In this article I’m writing about the usage of protobuf with typescript in Angular 2 via MQTT. The repository for this example is here Protobuf Protobuf a short for Protocol Buffers are […] Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data – think...">
+  
+
+  
+  <meta name="twitter:image" content="http://sclausen.github.io/img/avatar-icon.png" />
+  
+
+</head>
+
+
+  <body>
+
+    
+  
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+        <a class="navbar-brand" href="http://sclausen.github.io">Sebastian Clausen's Blog</a>
+      
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+      </ul>
+    </div>
+
+	
+	<div class="avatar-container">
+	  <div class="avatar-img-border">
+	    <a href="http://sclausen.github.io ">
+	      <img class="avatar-img" src="/img/avatar-icon.png" />
+		</a>
+	  </div>
+	</div>
+	
+
+  </div>
+</nav>
+
+
+    <!-- TODO this file has become a mess, refactor it -->
+
+
+
+
+
+<header class="header-section ">
+
+<div class="intro-header no-img">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="post-heading">
+          <h1>Reduce Payload in an IoT setup.</h1>
+		  
+		  
+		  
+		  <span class="post-meta">Posted on February 20, 2017</span>
+		  
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</header>
+
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+      <article role="main" class="blog-post">
+        <h2 id="using-protobuf-with-angular2-and-mqtt">Using Protobuf with Angular2 and MQTT</h2>
+
+<p>In this article I’m writing about the usage of protobuf with typescript in Angular 2 via MQTT. The repository for this example is <a href="https://github.com/sclausen/angular2-protobuf-mqtt-example">here</a></p>
+
+<h3 id="protobuf">Protobuf</h3>
+<p>Protobuf a short for <a href="https://developers.google.com/protocol-buffers/">Protocol Buffers</a> are</p>
+<blockquote>[…] Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data – think XML, but smaller, faster, and simpler. You define how you want your data to be structured once, then you can use special generated source code to easily write and read your structured data to and from a variety of data streams and using a variety of languages.</blockquote>
+
+<p>Regarding a usecase, think of sending data from a small device, e.g. an arduino from somewhere remote via mobile network. In this case every byte counts.</p>
+
+<h3 id="mqtt">MQTT</h3>
+<p><a href="http://mqtt.org/">MQTT</a> is</p>
+<blockquote>A lightweight messaging protocol for small sensors and mobile devices, optimized for high-latency or unreliable networks</blockquote>
+
+<h3 id="angular2">Angular2</h3>
+<p>To keep things simple, I’ll use <a href="https://angular.io/">Angular2</a>, one of many really nice frontend frameworks to speed up developing a small example for this article.</p>
+
+<h3 id="using-protobuf">Using Protobuf</h3>
+<p>Google did a great job and installing/using protobuf is <a href="https://github.com/google/protobuf/blob/master/src/README.md">dead simple</a>. Either you clone the repository and build it fro yourself, or <a href="https://github.com/google/protobuf/releases">download the suiting prebuilt library</a> for your system and your desired target language. Googles protobuf support as target languages C++, C#, Java, JavaScript, Objective-C, PHP, Python and Ruby. There are also several other community implementations for other languages, like Haskell, C or a very nice all-you-need-project <a href="https://github.com/dcodeIO/protobuf.js">protobuf.js</a>.</p>
+
+<p>For every supported language, there is a folder in the main project, containing a readme file how to use the compiler to compile a <code class="highlighter-rouge">*.proto</code>. Proto files are the definitions of your messages you want to serialize/deserialize. To read more about the format, I can recommend the <a href="https://developers.google.com/protocol-buffers/docs/proto3">
+Language Guide (proto3)</a>.</p>
+
+<p>To keep this example simple, we just want to send an uint64 via mqtt.
+Here is the protobuf file <samp>value.proto</samp></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>syntax = "proto3";
+
+package example;
+
+message Value {
+  uint64 value = 1;
+}
+</code></pre>
+</div>
+
+<p>To actually use it, we have to compile it to a javascript file. As I mentioned before, the official protobuf compiler has a js target with different options. Unfortunately, it’s difficult to use with typescript, which I want to use.</p>
+
+<p><a href="https://github.com/dcodeIO/protobuf.js">protobuf.js</a> for the rescue!</p>
+
+<p>Along the library files you have to include in your project to encode or decode protobuf messages in general, protobuf.js has a command line interface to directly create the needed javascript files for our <samp>value.proto</samp> file and the typescript definitions without the need of protoc from <a href="https://github.com/google/protobuf">google/protobuf</a>.</p>
+
+<p>To compile the <code class="highlighter-rouge">value.proto</code> file and directly place it where we want to use it in our example, execute the following script:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>./node_modules/protobufjs/bin/pbjs -t static-module -w commonjs -o ./src/protobuf/value.protobuf.js ./value.proto
+</code></pre>
+</div>
+
+<p><a href="https://github.com/dcodeIO/protobuf.js">protobuf.js</a> additionally has a tool to generate the typescript definitions for us, so using it in <a href="https://angular.io/">Angular2</a> is very convenient.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>./node_modules/protobufjs/bin/pbts -o ./src/protobuf/value.protobuf.d.ts ./src/protobuf/value.protobuf.js
+</code></pre>
+</div>
+
+<p>To use this <code class="highlighter-rouge">*.d.ts</code> with our editor and the typescript compiler, we have to add it to our <code class="highlighter-rouge">tsconfig.json</code>, for example adding the whole <code class="highlighter-rouge">./src/protobuf</code> folder to the <code class="highlighter-rouge">typeRoots</code> array.</p>
+
+<p>Now we can start using protobuf by importing the bundle</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>import * as root from '../protobuf/value.protobuf.js';
+</code></pre>
+</div>
+
+<p>As defined in <samp>value.proto</samp>, the object under root is the packagename <samp>example</samp> and then the only message type we defined <samp>Value</samp>. With it we can now create, encode, decode, verify and convert messages. For detailed information, what you can do with the <samp>Value</samp> object, you may hava a look at the typescript definition file <samp>./src/protobuf/value.protobuf.d.ts</samp></p>
+
+<p>If you run the example app, click the “Subscribe” button, and enter a number. Remember, we defined the value as a uint64. Then click “Publish”.</p>
+
+<p>For this example, I chose the catchy topic name <code class="highlighter-rouge">angular2-protobuf-mqtt-example</code>. In a real application this wouldn’t be a clever idea, since the topic would likely make up the majority of the message size. So keep in mind, to chose concise topic names.</p>
+
+<p>Now the following code is executed in the publish component</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>const buffer = root.example.Value.encode({value: 123456789}).finish();
+this.mqtt.unsafePublish('angular2-protobuf-mqtt-example', buffer);
+</code></pre>
+</div>
+
+<p>The subscribe component now will receive the encoded message and will decode it</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>const value: root.example.Value = root.example.Value.decode(message.payload);
+this.message = value.toJSON();
+</code></pre>
+</div>
+
+<p><samp>this.message</samp> is then rendered in the component via the json pipe.</p>
+
+
+      </article>
+
+      
+
+      
+        <!-- Check if any share-links are active -->
+
+
+
+
+<section id = "social-share-section">
+
+  <!--- Share on Twitter -->
+  
+    <a href="https://twitter.com/intent/tweet?text=Reduce+Payload+in+an+IoT+setup.+http://sclausen.github.io/2017-02-20-reduce-payload-in-an-iot-setup/"
+      class="btn btn-social-icon btn-twitter" title="Share on Twitter">
+      <span class="fa fa-fw fa-twitter" aria-hidden="true"></span>
+    </a>
+  
+
+  <!--- Share on Facebook -->
+  
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http://sclausen.github.io/2017-02-20-reduce-payload-in-an-iot-setup/"
+      class="btn btn-social-icon btn-facebook" title="Share on Facebook">
+      <span class="fa fa-fw fa-facebook" aria-hidden="true"></span>
+    </a>
+  
+
+  <!--- Share on Google Plus -->
+  
+
+  <!--- Share on LinkedIn -->
+  
+    <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://sclausen.github.io/2017-02-20-reduce-payload-in-an-iot-setup/"
+      class="btn btn-social-icon btn-linkedin" title="Share on LinkedIn">
+      <span class="fa fa-fw fa-linkedin" aria-hidden="true"></span>
+    </a>
+  
+
+</section>
+
+
+
+      
+
+      <ul class="pager blog-pager">
+        
+        
+      </ul>
+
+      
+        <div class="disqus-comments">
+          
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    var disqus_shortname = 'sclausen';
+	    /* ensure that pages with query string get the same discussion */
+            var url_parts = window.location.href.split("?");
+            var disqus_url = url_parts[0];	    
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container beautiful-jekyll-footer">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+          
+          <li>
+            <a href="https://github.com/sclausen" title="GitHub">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+		  
+	  
+      
+		  
+          <li>
+            <a href="mailto:blog@sebastian-clausen.de" title="Email me">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+		  
+		  
+          <li>
+            <a href="https://www.xing.com/profile/Sebastian_Clausen7" title="Xing">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-xing fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+		  
+      
+      
+      
+      
+      
+		  
+        </ul>
+        <p class="copyright text-muted">
+		  Sebastian Clausen
+		  &nbsp;&bull;&nbsp;
+		  2017
+
+		  
+		  &nbsp;&bull;&nbsp;
+		  <a href="http://sclausen.github.io">blog.sebastian-clausen.de</a>
+		  
+	    </p>
+	        <!-- Please don't remove this, keep my open source work credited :) -->
+		<p class="theme-by text-muted">
+		  Theme by
+		  <a href="http://deanattali.com/beautiful-jekyll/">beautiful-jekyll</a>
+		</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  
+    
+
+
+
+
+
+
+  
+    <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+    
+      <script>
+      	if (typeof jQuery == 'undefined') {
+      	  document.write('<script src="/js/jquery-1.11.2.min.js"></scr' + 'ipt>');
+      	}
+      </script>
+    
+  
+    <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+    
+	<script src="/js/bootstrap.min.js"></script>
+    
+  
+    <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
+    
+	<script src="/js/main.js"></script>
+    
+  
+
+
+
+
+  
+  </body>
+</html>
